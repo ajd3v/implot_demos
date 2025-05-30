@@ -7,6 +7,13 @@
 #include <sstream> // For std::ostringstream
 #include <cmath>   // For std::abs, std::fabs
 #include <limits>  // For std::numeric_limits
+#include <vector>  // Required for std::vector
+
+// Forward declare MarketDataPoint if its definition is in MarketDataGenerator.h
+// and MarketDataGenerator.h is not included here to avoid circular dependencies.
+// However, since MarketDataPoint is used in a vector parameter,
+// its full definition needs to be known. So, include MarketDataGenerator.h
+#include "MarketDataGenerator.h" // Provides MarketDataPoint definition
 
 // Helper function to format a Unix timestamp into "YYYY-MM-DD HH:MM:SS"
 inline std::string FormatTimestampForTooltip(double unixTimestamp) {
@@ -47,7 +54,8 @@ inline int FindClosestPointIndex(const std::vector<double>& timestamps, double m
 }
 
 // Overload for MarketDataPoint vector, searching based on MarketDataPoint.Timestamp
-inline int FindClosestPointIndex(const std::vector<MarketDataGenerator::MarketDataPoint>& dataPoints, double mouseX) {
+// Corrected from MarketDataGenerator::MarketDataPoint to MarketDataPoint
+inline int FindClosestPointIndex(const std::vector<MarketDataPoint>& dataPoints, double mouseX) {
     if (dataPoints.empty()) {
         return -1;
     }

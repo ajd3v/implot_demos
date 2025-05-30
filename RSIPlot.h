@@ -15,27 +15,27 @@
 inline void ShowRSIPlot(const std::string& plotId,
                         const std::vector<double>& rsiValues,
                         const std::vector<double>& rsiTimestamps,
-                        int rsiPeriod, // Changed from /*period*/ to rsiPeriod
+                        int rsiPeriod, 
                         float plotHeight = 100.0f) {
 
     if (ImPlot::BeginPlot(plotId.c_str(), ImVec2(-1, plotHeight))) {
         ImPlot::LinkNextPlotAxesX();
 
-        ImPlot::SetupAxis(ImAxis_X1, "Time", ImPlotAxisFlags_Time);
-        ImPlot::SetupAxis(ImAxis_Y1, "RSI", ImPlotAxisFlags_LockMin | ImPlotAxisFlags_LockMax);
-        ImPlot::SetupAxisLimits(ImAxis_Y1, 0, 100, ImPlotCond_Always); 
+        ImPlot::SetupAxis(ImAxis_X1, "Time", ImPlot::ImPlotAxisFlags_Time); // Corrected
+        ImPlot::SetupAxis(ImAxis_Y1, "RSI", ImPlot::ImPlotAxisFlags_LockMin | ImPlot::ImPlotAxisFlags_LockMax); // Corrected
+        ImPlot::SetupAxisLimits(ImAxis_Y1, 0, 100, ImPlot::ImPlotCond_Always); // Corrected
 
         if (!rsiValues.empty() && !rsiTimestamps.empty() && rsiValues.size() == rsiTimestamps.size()) {
             ImPlot::PlotLine("##RSI", rsiTimestamps.data(), rsiValues.data(), static_cast<int>(rsiValues.size()));
 
             double p_levels[] = {30.0, 70.0};
-            ImPlot::PushStyleColor(ImPlotCol_Line, ImVec4(0.7f, 0.7f, 0.7f, 0.8f)); 
-            ImPlot::PlotInfLines("##Levels", p_levels, 2, ImPlotInfLinesFlags_Horizontal);
+            ImPlot::PushStyleColor(ImPlot::ImPlotCol_Line, ImVec4(0.7f, 0.7f, 0.7f, 0.8f)); // Corrected
+            ImPlot::PlotInfLines("##Levels", p_levels, 2, ImPlot::ImPlotInfLinesFlags_Horizontal); // Corrected
             ImPlot::PopStyleColor();
 
             // Tooltip Logic
             if (ImPlot::IsPlotHovered()) {
-                ImPlotPoint mouse = ImPlot::GetPlotMousePos();
+                ImPlot::ImPlotPoint mouse = ImPlot::GetPlotMousePos(); // Corrected
                 int hoveredIndex = FindClosestPointIndex(rsiTimestamps, mouse.x);
 
                 if (hoveredIndex != -1) {

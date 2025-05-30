@@ -5,14 +5,15 @@
 #include <numeric>      // For std::accumulate
 #include <stdexcept>    // For std::invalid_argument (optional, can also just return empty)
 #include <algorithm>    // For std::max/min
-#include "MarketDataGenerator.h" // Assumed available for MarketDataPoint
+#include "MarketDataGenerator.h" // Provides MarketDataPoint definition
 
 namespace TA {
 
 // Calculates Simple Moving Average (SMA) from Close prices.
 // Returns a vector of SMA values. The size will be points.size() - period + 1.
 // SMA values correspond to the *end* of each period window.
-inline std::vector<double> CalculateSMA(const std::vector<MarketDataGenerator::MarketDataPoint>& points, int period) {
+// Corrected from MarketDataGenerator::MarketDataPoint to MarketDataPoint
+inline std::vector<double> CalculateSMA(const std::vector<MarketDataPoint>& points, int period) {
     std::vector<double> smaValues;
     if (period <= 0 || static_cast<int>(points.size()) < period) {
         return smaValues; // Not enough data or invalid period
@@ -40,7 +41,8 @@ inline std::vector<double> CalculateSMA(const std::vector<MarketDataGenerator::M
 // Calculates Relative Strength Index (RSI) from Close prices.
 // Returns a vector of RSI values (scaled 0-100). Size will be points.size() - period.
 // RSI values correspond to the *end* of each period window for price changes.
-inline std::vector<double> CalculateRSI(const std::vector<MarketDataGenerator::MarketDataPoint>& points, int period) {
+// Corrected from MarketDataGenerator::MarketDataPoint to MarketDataPoint
+inline std::vector<double> CalculateRSI(const std::vector<MarketDataPoint>& points, int period) {
     std::vector<double> rsiValues;
     if (period <= 0 || static_cast<int>(points.size()) <= period) { // Need at least period+1 points for 'period' changes
         return rsiValues;

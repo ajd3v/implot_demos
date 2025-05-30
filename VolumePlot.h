@@ -8,14 +8,14 @@
 
 #include "imgui.h"
 #include "implot.h"
-#include "MarketDataGenerator.h" // For MarketDataPoint struct
+#include "MarketDataGenerator.h" // Provides MarketDataPoint definition
 #include "PlotUtils.h"           // For FormatTimestampForTooltip and FindClosestPointIndex
 
 // marketName: Name of the market (used for context, possibly in plot item ID if not in title).
 // ohlcData: A vector of MarketDataPoint structs containing the timestamp and volume data.
 // plotHeight: Suggested height for the volume plot.
 inline void ShowVolumePlot(const std::string& marketName,
-                           const std::vector<MarketDataGenerator::MarketDataPoint>& ohlcData,
+                           const std::vector<MarketDataPoint>& ohlcData,
                            float plotHeight = 100.0f) {
     std::string plotTitle = "Volume##" + marketName; 
 
@@ -25,9 +25,6 @@ inline void ShowVolumePlot(const std::string& marketName,
         } else {
             std::vector<double> xs(ohlcData.size());
             std::vector<double> volumes(ohlcData.size());
-            // Keep a direct copy of timestamps for FindClosestPointIndex if ohlcData itself is not used
-            // or if xs is modified (e.g. for log scale, though not the case here)
-            // For this function, ohlcData[i].Timestamp is identical to xs[i] after loop.
 
             for (size_t i = 0; i < ohlcData.size(); ++i) {
                 xs[i] = ohlcData[i].Timestamp;
@@ -36,10 +33,10 @@ inline void ShowVolumePlot(const std::string& marketName,
             
             ImPlot::LinkNextPlotAxesX();
             
-            ImPlot::SetupAxis(ImAxis_X1, "Time", ImPlotAxisFlags_Time);
-            ImPlot::SetupAxis(ImAxis_Y1, "Volume", ImPlotAxisFlags_AutoFit);
+            ImPlot::SetupAxis(ImAxis_X1, "Time", ImPlot::ImPlotAxisFlags_Time); // Corrected
+            ImPlot::SetupAxis(ImAxis_Y1, "Volume", ImPlot::ImPlotAxisFlags_AutoFit); // Corrected
             
-            ImPlot::PushStyleColor(ImPlotCol_Fill, ImVec4(0.4f, 0.4f, 0.8f, 0.6f));
+            ImPlot::PushStyleColor(ImPlot::ImPlotCol_Fill, ImVec4(0.4f, 0.4f, 0.8f, 0.6f)); // Corrected
             
             double barWidthSetting;
             if (ohlcData.size() >= 2) {
@@ -60,17 +57,15 @@ inline void ShowVolumePlot(const std::string& marketName,
 
             // Tooltip Logic
             if (ImPlot::IsPlotHovered() && !ohlcData.empty()) {
-                ImPlotPoint mouse = ImPlot::GetPlotMousePos();
-                // We can use FindClosestPointIndex with ohlcData directly, or with the xs vector.
-                // Using ohlcData is fine as its Timestamps are what we need.
+                ImPlot::ImPlotPoint mouse = ImPlot::GetPlotMousePos(); // Corrected
                 int hoveredIndex = FindClosestPointIndex(ohlcData, mouse.x);
 
                 if (hoveredIndex != -1) {
-                    const auto& dp = ohlcData[hoveredIndex];
+                    const auto& dp = ohlcData[hoveredIndex]; 
                     ImGui::BeginTooltip();
                     ImGui::Text("Time: %s", FormatTimestampForTooltip(dp.Timestamp).c_str());
                     ImGui::Separator();
-                    ImGui::Text("Volume: %.0f", dp.Volume); // Volume often shown as integer or no decimals
+                    ImGui::Text("Volume: %.0f", dp.Volume); 
                     ImGui::EndTooltip();
                 }
             }
