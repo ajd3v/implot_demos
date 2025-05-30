@@ -19,27 +19,32 @@ inline void ShowRSIPlot(const std::string& plotId,
                         float plotHeight = 100.0f) {
 
     if (ImPlot::BeginPlot(plotId.c_str(), ImVec2(-1, plotHeight))) {
-        ImPlot::LinkNextPlotAxesX();
+        // Corrected: Removed ImPlot:: prefix for LinkNextPlotAxesX
+        LinkNextPlotAxesX();
 
-        ImPlot::SetupAxis(ImAxis_X1, "Time", ImPlot::ImPlotAxisFlags_Time); // Corrected
-        ImPlot::SetupAxis(ImAxis_Y1, "RSI", ImPlot::ImPlotAxisFlags_LockMin | ImPlot::ImPlotAxisFlags_LockMax); // Corrected
-        ImPlot::SetupAxisLimits(ImAxis_Y1, 0, 100, ImPlot::ImPlotCond_Always); // Corrected
+        // Corrected: Removed ImPlot:: prefix for specific flags
+        ImPlot::SetupAxis(ImAxis_X1, "Time", ImPlotAxisFlags_Time); 
+        ImPlot::SetupAxis(ImAxis_Y1, "RSI", ImPlotAxisFlags_LockMin | ImPlotAxisFlags_LockMax); 
+        // Corrected: Removed ImPlot:: prefix for ImPlotCond_Always
+        ImPlot::SetupAxisLimits(ImAxis_Y1, 0, 100, ImPlotCond_Always); 
 
         if (!rsiValues.empty() && !rsiTimestamps.empty() && rsiValues.size() == rsiTimestamps.size()) {
             ImPlot::PlotLine("##RSI", rsiTimestamps.data(), rsiValues.data(), static_cast<int>(rsiValues.size()));
 
             double p_levels[] = {30.0, 70.0};
-            ImPlot::PushStyleColor(ImPlot::ImPlotCol_Line, ImVec4(0.7f, 0.7f, 0.7f, 0.8f)); // Corrected
-            ImPlot::PlotInfLines("##Levels", p_levels, 2, ImPlot::ImPlotInfLinesFlags_Horizontal); // Corrected
+            // Corrected: Removed ImPlot:: prefix for ImPlotCol_Line
+            ImPlot::PushStyleColor(ImPlotCol_Line, ImVec4(0.7f, 0.7f, 0.7f, 0.8f)); 
+            // Corrected: Removed ImPlot:: prefix for ImPlotInfLinesFlags_Horizontal
+            ImPlot::PlotInfLines("##Levels", p_levels, 2, ImPlotInfLinesFlags_Horizontal); 
             ImPlot::PopStyleColor();
 
             // Tooltip Logic
             if (ImPlot::IsPlotHovered()) {
-                ImPlot::ImPlotPoint mouse = ImPlot::GetPlotMousePos(); // Corrected
+                // Corrected: Removed ImPlot:: prefix for ImPlotPoint
+                ImPlotPoint mouse = ImPlot::GetPlotMousePos(); 
                 int hoveredIndex = FindClosestPointIndex(rsiTimestamps, mouse.x);
 
                 if (hoveredIndex != -1) {
-                    // Ensure index is valid for rsiValues as well
                     if (static_cast<size_t>(hoveredIndex) < rsiValues.size()) { 
                         ImGui::BeginTooltip();
                         ImGui::Text("Time: %s", FormatTimestampForTooltip(rsiTimestamps[hoveredIndex]).c_str());

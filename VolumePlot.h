@@ -31,12 +31,15 @@ inline void ShowVolumePlot(const std::string& marketName,
                 volumes[i] = ohlcData[i].Volume;
             }
             
-            ImPlot::LinkNextPlotAxesX();
+            // Corrected: Removed ImPlot:: prefix for LinkNextPlotAxesX
+            LinkNextPlotAxesX(); 
             
-            ImPlot::SetupAxis(ImAxis_X1, "Time", ImPlot::ImPlotAxisFlags_Time); // Corrected
-            ImPlot::SetupAxis(ImAxis_Y1, "Volume", ImPlot::ImPlotAxisFlags_AutoFit); // Corrected
+            // Corrected: Removed ImPlot:: prefix for specific flags
+            ImPlot::SetupAxis(ImAxis_X1, "Time", ImPlotAxisFlags_Time); 
+            ImPlot::SetupAxis(ImAxis_Y1, "Volume", ImPlotAxisFlags_AutoFit); 
             
-            ImPlot::PushStyleColor(ImPlot::ImPlotCol_Fill, ImVec4(0.4f, 0.4f, 0.8f, 0.6f)); // Corrected
+            // Corrected: Removed ImPlot:: prefix for ImPlotCol_Fill
+            ImPlot::PushStyleColor(ImPlotCol_Fill, ImVec4(0.4f, 0.4f, 0.8f, 0.6f)); 
             
             double barWidthSetting;
             if (ohlcData.size() >= 2) {
@@ -57,7 +60,8 @@ inline void ShowVolumePlot(const std::string& marketName,
 
             // Tooltip Logic
             if (ImPlot::IsPlotHovered() && !ohlcData.empty()) {
-                ImPlot::ImPlotPoint mouse = ImPlot::GetPlotMousePos(); // Corrected
+                // Corrected: Removed ImPlot:: prefix for ImPlotPoint
+                ImPlotPoint mouse = ImPlot::GetPlotMousePos(); 
                 int hoveredIndex = FindClosestPointIndex(ohlcData, mouse.x);
 
                 if (hoveredIndex != -1) {
